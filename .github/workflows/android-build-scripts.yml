@@ -53,6 +53,10 @@ jobs:
           echo "ANDROID_NDK_ROOT=$PWD/.ndk/$(ls .ndk)" >> $GITHUB_ENV
       - name: run the build script
         run: ./android.sh -d --enable-android-media-codec --enable-android-zlib --enable-gpl --enable-libass --enable-fontconfig --enable-freetype --enable-fribidi --disable-arm-v7a --disable-arm-v7a-neon --disable-x86 --disable-x86-64
+      - name: Package AAR File
+        run: |
+          cd android
+          ./gradlew assembleRelease
       - name: print build logs
         if: ${{ always() }}
         run: cat build.log
@@ -63,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: custom-ffmpeg-android-aar
-          path: prebuilt/
+          path: android/ffmpeg-kit-android-lib/build/outputs/aar/
   build-lts-on-linux:
     name: android lts on linux
     runs-on: ubuntu-22.04
